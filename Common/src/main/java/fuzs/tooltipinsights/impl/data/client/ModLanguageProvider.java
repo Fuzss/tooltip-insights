@@ -2,7 +2,7 @@ package fuzs.tooltipinsights.impl.data.client;
 
 import fuzs.puzzleslib.api.client.data.v2.AbstractLanguageProvider;
 import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
-import fuzs.tooltipinsights.api.v1.config.ItemDescriptionMode;
+import fuzs.tooltipinsights.common.api.v1.config.TooltipDescriptionMode;
 
 public class ModLanguageProvider extends AbstractLanguageProvider {
 
@@ -12,7 +12,6 @@ public class ModLanguageProvider extends AbstractLanguageProvider {
 
     @Override
     public void addTranslations(TranslationBuilder translationBuilder) {
-        translationBuilder.add(ItemDescriptionMode.SHIFT_COMPONENT, "\u21E7 Shift");
-        translationBuilder.add(ItemDescriptionMode.VIEW_DESCRIPTIONS_COMPONENT, "Hold %s to view descriptions.");
+        translationBuilder.add(TooltipDescriptionMode.VIEW_DESCRIPTIONS_KEY, "Hold %s to view descriptions.");
     }
 }
