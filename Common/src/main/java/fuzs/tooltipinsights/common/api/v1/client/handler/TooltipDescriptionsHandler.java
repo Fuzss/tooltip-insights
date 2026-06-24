@@ -42,7 +42,7 @@ public abstract class TooltipDescriptionsHandler<T> {
     }
 
     private void modifyTooltip(ItemStack itemStack, List<Component> tooltipLines, HolderLookup.Provider registries, TooltipFlag tooltipFlag) {
-        TooltipDescriptionMode tooltipDescriptionMode = this.getItemDescriptionMode();
+        TooltipDescriptionMode tooltipDescriptionMode = this.getTooltipDescriptionMode();
 
         if (!tooltipDescriptionMode.isActive()) {
             return;
@@ -87,7 +87,7 @@ public abstract class TooltipDescriptionsHandler<T> {
         }
     }
 
-    protected abstract TooltipDescriptionMode getItemDescriptionMode();
+    protected abstract TooltipDescriptionMode getTooltipDescriptionMode();
 
     protected abstract Map<String, T> getByDescriptionId(ItemStack itemStack, HolderLookup.Provider registries);
 
