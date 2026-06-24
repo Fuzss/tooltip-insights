@@ -11,6 +11,8 @@ public abstract class AbstractClientConfig implements ConfigCore {
     protected static final String FORMATTING_CODES_DESCRIPTION_LINK = "https://minecraft.wiki/w/Formatting_codes";
 
     public static abstract class StyledTooltips implements ConfigCore {
+        @Config(description = "Add descriptions and other useful information to tooltips.")
+        public TooltipDescriptionMode tooltipDescriptions = TooltipDescriptionMode.ALWAYS;
         @Config(description = {
                 "Apply a fixed string before every description line.",
                 "Supports formatting codes which will also apply to the description for setting custom text colors and styles.",
@@ -27,14 +29,6 @@ public abstract class AbstractClientConfig implements ConfigCore {
             this.decorationComponent = ComponentHelper.getAsComponent(this.tooltipLineDecorations);
             this.decorationStyle = ComponentHelper.getDefaultStyle(this.tooltipLineDecorations);
         }
-    }
-
-    /**
-     * TODO rename field to advancedTooltips and merge class into StyledTooltips
-     */
-    public static abstract class ItemTooltips extends StyledTooltips {
-        @Config(description = "Add descriptions and other useful information to tooltips.")
-        public ItemDescriptionMode itemDescriptions = ItemDescriptionMode.ALWAYS;
     }
 
     public static class TooltipComponents implements ConfigCore {

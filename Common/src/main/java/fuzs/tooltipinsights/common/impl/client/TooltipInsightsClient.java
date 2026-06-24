@@ -11,7 +11,7 @@ import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.ModNameLines;
 import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.TooltipLinesExtractor;
 import fuzs.tooltipinsights.common.api.v1.client.handler.TooltipDescriptionsHandler;
 import fuzs.tooltipinsights.common.api.v1.config.AbstractClientConfig;
-import fuzs.tooltipinsights.common.api.v1.config.ItemDescriptionMode;
+import fuzs.tooltipinsights.common.api.v1.config.TooltipDescriptionMode;
 import fuzs.tooltipinsights.common.impl.TooltipInsights;
 import net.minecraft.ChatFormatting;
 import net.minecraft.util.Util;
@@ -64,8 +64,8 @@ public class TooltipInsightsClient implements ClientModConstructor {
                     INTERNAL_NAME);
 
             @Override
-            protected ItemDescriptionMode getItemDescriptionMode() {
-                return ItemDescriptionMode.SHIFT;
+            protected TooltipDescriptionMode getItemDescriptionMode() {
+                return TooltipDescriptionMode.SHIFT;
             }
 
             @Override
