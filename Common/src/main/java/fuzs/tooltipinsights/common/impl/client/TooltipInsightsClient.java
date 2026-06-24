@@ -14,12 +14,12 @@ import fuzs.tooltipinsights.common.api.v1.config.AbstractClientConfig;
 import fuzs.tooltipinsights.common.api.v1.config.TooltipDescriptionMode;
 import fuzs.tooltipinsights.common.impl.TooltipInsights;
 import net.minecraft.ChatFormatting;
-import net.minecraft.util.Util;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.Util;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -38,7 +38,10 @@ public class TooltipInsightsClient implements ClientModConstructor {
     }
 
     private static void setupDevelopmentEnvironment() {
-        if (!ModLoaderEnvironment.INSTANCE.isDevelopmentEnvironment(TooltipInsights.MOD_ID)) return;
+        if (!ModLoaderEnvironment.INSTANCE.isDevelopmentEnvironment(TooltipInsights.MOD_ID)) {
+            return;
+        }
+
         ItemTooltipCallback.EVENT.register(EventPhase.LAST, new TooltipDescriptionsHandler<MobEffectInstance>() {
             static final TooltipLinesExtractor<MobEffectInstance, AbstractClientConfig.TooltipComponents> DESCRIPTION = new DescriptionLines<>() {
                 @Override
@@ -64,7 +67,7 @@ public class TooltipInsightsClient implements ClientModConstructor {
                     INTERNAL_NAME);
 
             @Override
-            protected TooltipDescriptionMode getItemDescriptionMode() {
+            protected TooltipDescriptionMode getTooltipDescriptionMode() {
                 return TooltipDescriptionMode.SHIFT;
             }
 
