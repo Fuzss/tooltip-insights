@@ -13,6 +13,17 @@ import net.minecraft.world.item.TooltipFlag;
 import java.util.List;
 
 public enum TooltipDescriptionMode {
+    DISABLED {
+        @Override
+        public boolean isActive() {
+            return false;
+        }
+
+        @Override
+        public void processTooltipLines(ItemStack itemStack, List<Component> tooltipLines, TooltipFlag tooltipFlag) {
+            // NO-OP
+        }
+    },
     NEVER {
         @Override
         public boolean isActive() {
