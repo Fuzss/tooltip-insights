@@ -38,7 +38,10 @@ public class TooltipInsightsClient implements ClientModConstructor {
     }
 
     private static void setupDevelopmentEnvironment() {
-        if (!ModLoaderEnvironment.INSTANCE.isDevelopmentEnvironment(TooltipInsights.MOD_ID)) return;
+        if (!ModLoaderEnvironment.INSTANCE.isDevelopmentEnvironment(TooltipInsights.MOD_ID)) {
+            return;
+        }
+
         ItemTooltipCallback.EVENT.register(EventPhase.LAST, new TooltipDescriptionsHandler<MobEffectInstance>() {
             static final TooltipLinesExtractor<MobEffectInstance, AbstractClientConfig.TooltipComponents> DESCRIPTION = new DescriptionLines<>() {
                 @Override
@@ -64,7 +67,7 @@ public class TooltipInsightsClient implements ClientModConstructor {
                     INTERNAL_NAME);
 
             @Override
-            protected TooltipDescriptionMode getItemDescriptionMode() {
+            protected TooltipDescriptionMode getTooltipDescriptionMode() {
                 return TooltipDescriptionMode.SHIFT;
             }
 
