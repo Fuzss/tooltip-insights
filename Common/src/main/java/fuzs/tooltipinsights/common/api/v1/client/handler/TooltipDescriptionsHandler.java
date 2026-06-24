@@ -2,7 +2,7 @@ package fuzs.tooltipinsights.common.api.v1.client.handler;
 
 import fuzs.puzzleslib.common.api.client.event.v1.entity.player.ClientPlayerNetworkEvents;
 import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.DescriptionLines;
-import fuzs.tooltipinsights.common.api.v1.config.ItemDescriptionMode;
+import fuzs.tooltipinsights.common.api.v1.config.TooltipDescriptionMode;
 import fuzs.tooltipinsights.common.impl.TooltipInsights;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -42,9 +42,9 @@ public abstract class TooltipDescriptionsHandler<T> {
     }
 
     private void modifyTooltip(ItemStack itemStack, List<Component> tooltipLines, HolderLookup.Provider registries, TooltipFlag tooltipFlag) {
-        ItemDescriptionMode itemDescriptionMode = this.getItemDescriptionMode();
+        TooltipDescriptionMode tooltipDescriptionMode = this.getItemDescriptionMode();
 
-        if (itemDescriptionMode == ItemDescriptionMode.NEVER && !itemDescriptionMode.isActive()) {
+        if (!tooltipDescriptionMode.isActive()) {
             return;
         }
 
@@ -68,7 +68,7 @@ public abstract class TooltipDescriptionsHandler<T> {
                                     tooltipLines.set(mutableInt.intValue(), componentReplacer.apply(component));
                                 }
 
-                                if (itemDescriptionMode.isActive()) {
+                                if (tooltipDescriptionMode.isActive()) {
                                     List<Component> list = this.getItemTooltipLines(t);
                                     tooltipLines.addAll(mutableInt.intValue() + 1, list);
                                     mutableInt.add(list.size());
@@ -76,7 +76,7 @@ public abstract class TooltipDescriptionsHandler<T> {
                                 } else if (mutableBoolean.isTrue()) {
                                     // make sure the view description line is only added when there will actually be a description
                                     mutableBoolean.setFalse();
-                                    itemDescriptionMode.processTooltipLines(itemStack, tooltipLines, tooltipFlag);
+                                    tooltipDescriptionMode.processTooltipLines(itemStack, tooltipLines, tooltipFlag);
                                     return true;
                                 }
                             }
@@ -87,7 +87,7 @@ public abstract class TooltipDescriptionsHandler<T> {
         }
     }
 
-    protected abstract ItemDescriptionMode getItemDescriptionMode();
+    protected abstract TooltipDescriptionMode getItemDescriptionMode();
 
     protected abstract Map<String, T> getByDescriptionId(ItemStack itemStack, HolderLookup.Provider registries);
 
