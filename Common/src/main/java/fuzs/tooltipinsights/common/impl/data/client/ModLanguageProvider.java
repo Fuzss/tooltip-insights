@@ -12,9 +12,6 @@ public class ModLanguageProvider extends AbstractLanguageProvider {
 
     @Override
     public void addTranslations(TranslationBuilder translationBuilder) {
-        translationBuilder.add(TooltipDescriptionMode.SHIFT_COMPONENT, "Shift");
-        translationBuilder.add(TooltipDescriptionMode.CONTROL_COMPONENT, "Control");
-        translationBuilder.add(TooltipDescriptionMode.ALT_COMPONENT, "Alt");
         translationBuilder.add(TooltipDescriptionMode.VIEW_DESCRIPTIONS_KEY, "Hold %s to view descriptions.");
     }
 }
