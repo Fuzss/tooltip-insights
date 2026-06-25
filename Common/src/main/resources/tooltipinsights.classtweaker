@@ -3,5 +3,5 @@ accessible	field	net/minecraft/network/chat/contents/objects/ObjectInfos	ID_MAPP
 accessible	field	net/minecraft/client/gui/font/FontManager	missingFontSet	Lnet/minecraft/client/gui/font/FontSet;
 accessible	field	net/minecraft/client/gui/font/AtlasGlyphProvider	GLYPH_INFO	Lcom/mojang/blaze3d/font/GlyphInfo;
 accessible	field	net/minecraft/client/gui/font/AtlasGlyphProvider	atlas	Lnet/minecraft/client/renderer/texture/TextureAtlas;
-accessible  field	net/minecraft/client/gui/font/AtlasGlyphProvider	renderTypes	Lnet/minecraft/client/gui/font/GlyphRenderTypes;
+accessible	field	net/minecraft/client/gui/font/AtlasGlyphProvider	renderTypes	Lnet/minecraft/client/gui/font/GlyphRenderTypes;
 accessible	field	net/minecraft/client/gui/font/AtlasGlyphProvider	missingWrapper	Lnet/minecraft/client/gui/GlyphSource;
