@@ -1,7 +1,7 @@
 package fuzs.tooltipinsights.common.api.v1.client.gui.tooltip;
 
 import fuzs.tooltipinsights.common.api.v1.config.AbstractClientConfig;
-import fuzs.tooltipinsights.common.impl.network.chat.contents.objects.SpacedSprite;
+import fuzs.tooltipinsights.common.impl.network.chat.contents.objects.WidthLimitedSprite;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
@@ -21,7 +21,7 @@ public abstract class TooltipLinesExtractor<T, C extends AbstractClientConfig.To
 
     public static <T, C extends AbstractClientConfig.TooltipComponents> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, Component decorationComponent, Style style, T t, C tooltipComponents) {
         Font font = Minecraft.getInstance().font;
-        Component indentComponent = Component.object(new SpacedSprite(font.width(decorationComponent)));
+        Component indentComponent = Component.object(new WidthLimitedSprite(font.width(decorationComponent)));
         MutableBoolean mutableBoolean = new MutableBoolean(true);
         List<Component> tooltipLines = new ArrayList<>();
 

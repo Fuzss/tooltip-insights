@@ -2,26 +2,29 @@ package fuzs.tooltipinsights.common.api.v1.config;
 
 import fuzs.puzzleslib.common.api.util.v1.CommonHelper;
 import fuzs.tooltipinsights.common.impl.TooltipInsights;
+import fuzs.tooltipinsights.common.impl.network.chat.contents.objects.SizedAtlasSprite;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.data.AtlasIds;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
 import java.util.List;
+import java.util.Optional;
 
 public enum TooltipDescriptionMode {
     DISABLED {
         @Override
         public boolean isActive() {
-            return false;
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void processTooltipLines(ItemStack itemStack, List<Component> tooltipLines, TooltipFlag tooltipFlag) {
-            // NO-OP
+            throw new UnsupportedOperationException();
         }
     },
     NEVER {
@@ -53,52 +56,51 @@ public enum TooltipDescriptionMode {
         }
 
         @Override
-        Component component() {
-            return SHIFT_COMPONENT;
+        Optional<Component> component() {
+            return Optional.of(SHIFT_COMPONENT);
         }
     },
     CONTROL {
         @Override
         public boolean isActive() {
-            return CommonHelper.hasShiftDown();
+            return CommonHelper.hasControlDown();
         }
 
         @Override
-        Component component() {
-            return CONTROL_COMPONENT;
+        Optional<Component> component() {
+            return Optional.of(CONTROL_COMPONENT);
         }
     },
     ALT {
         @Override
         public boolean isActive() {
-            return CommonHelper.hasShiftDown();
+            return CommonHelper.hasAltDown();
         }
 
         @Override
-        Component component() {
-            return ALT_COMPONENT;
+        Optional<Component> component() {
+            return Optional.of(ALT_COMPONENT);
         }
     };
 
-    public static final Component SHIFT_COMPONENT = component("tooltip.shift");
-    public static final Component CONTROL_COMPONENT = component("tooltip.control");
-    public static final Component ALT_COMPONENT = component("tooltip.alt");
+    public static final Component SHIFT_COMPONENT = createAtlasComponent(TooltipInsights.id("keyboard/shift"), 33, 9);
+    public static final Component CONTROL_COMPONENT = createAtlasComponent(TooltipInsights.id("keyboard/ctrl"), 27, 9);
+    public static final Component ALT_COMPONENT = createAtlasComponent(TooltipInsights.id("keyboard/alt"), 21, 9);
     public static final String VIEW_DESCRIPTIONS_KEY = Util.makeDescriptionId("gui",
             TooltipInsights.id("tooltip.view_descriptions"));
 
-    private static Component component(String name) {
-        return Component.translatable(Util.makeDescriptionId("gui", TooltipInsights.id(name)))
-                .withStyle(ChatFormatting.LIGHT_PURPLE);
+    public static Component createAtlasComponent(Identifier id, int width, int height) {
+        return Component.object(new SizedAtlasSprite(AtlasIds.GUI, id, width, height)).withStyle(ChatFormatting.WHITE);
     }
 
     public abstract boolean isActive();
 
-    Component component() {
-        return CommonComponents.EMPTY;
+    Optional<Component> component() {
+        return Optional.empty();
     }
 
     public void processTooltipLines(ItemStack itemStack, List<Component> tooltipLines, TooltipFlag tooltipFlag) {
-        Component component = Component.translatable(VIEW_DESCRIPTIONS_KEY, this.component())
+        Component component = Component.translatable(VIEW_DESCRIPTIONS_KEY, this.component().orElseThrow())
                 .withStyle(ChatFormatting.GRAY);
         tooltipLines.add(this.getLineIndex(itemStack, tooltipLines, tooltipFlag), component);
     }

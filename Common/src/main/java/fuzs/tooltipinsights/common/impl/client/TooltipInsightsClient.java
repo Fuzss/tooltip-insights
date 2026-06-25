@@ -2,6 +2,7 @@ package fuzs.tooltipinsights.common.impl.client;
 
 import com.google.common.collect.ImmutableList;
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.common.api.client.core.v1.context.ResourcePackReloadListenersContext;
 import fuzs.puzzleslib.common.api.client.event.v1.gui.ItemTooltipCallback;
 import fuzs.puzzleslib.common.api.core.v1.ModLoaderEnvironment;
 import fuzs.puzzleslib.common.api.event.v1.core.EventPhase;
@@ -13,12 +14,15 @@ import fuzs.tooltipinsights.common.api.v1.client.handler.TooltipDescriptionsHand
 import fuzs.tooltipinsights.common.api.v1.config.AbstractClientConfig;
 import fuzs.tooltipinsights.common.api.v1.config.TooltipDescriptionMode;
 import fuzs.tooltipinsights.common.impl.TooltipInsights;
+import fuzs.tooltipinsights.common.impl.client.gui.font.SizedAtlasGlyphProvider;
+import fuzs.tooltipinsights.common.impl.client.gui.font.WidthLimitedGlyphProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Util;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
@@ -86,7 +90,7 @@ public class TooltipInsightsClient implements ClientModConstructor {
             protected List<Component> getItemTooltipLines(MobEffectInstance mobEffectInstance) {
                 return TooltipLinesExtractor.getTooltipLines(ITEM_SUPPLIERS,
                         Component.literal(" \u25C6 "),
-                        Style.EMPTY.applyFormat(ChatFormatting.GRAY),
+                        Style.EMPTY.withColor(ChatFormatting.GRAY),
                         mobEffectInstance,
                         Util.make(new AbstractClientConfig.TooltipComponents(),
                                 (AbstractClientConfig.TooltipComponents tooltipComponents) -> {
@@ -94,5 +98,13 @@ public class TooltipInsightsClient implements ClientModConstructor {
                                 }));
             }
         }::onItemTooltip);
+    }
+
+    @Override
+    public void onAddResourcePackReloadListeners(ResourcePackReloadListenersContext context) {
+        context.registerReloadListener(TooltipInsights.id("glyph_providers"), (ResourceManager resourceManager) -> {
+            SizedAtlasGlyphProvider.onResourceManagerReload();
+            WidthLimitedGlyphProvider.onResourceManagerReload();
+        });
     }
 }
