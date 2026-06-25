@@ -44,7 +44,7 @@ public abstract class TooltipDescriptionsHandler<T> {
     private void modifyTooltip(ItemStack itemStack, List<Component> tooltipLines, HolderLookup.Provider registries, TooltipFlag tooltipFlag) {
         TooltipDescriptionMode tooltipDescriptionMode = this.getTooltipDescriptionMode();
 
-        if (!tooltipDescriptionMode.isActive()) {
+        if (tooltipDescriptionMode == TooltipDescriptionMode.DISABLED) {
             return;
         }
 
