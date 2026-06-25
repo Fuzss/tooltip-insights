@@ -21,7 +21,7 @@ public abstract class ModNameLines<T> extends TooltipLinesExtractor<T, AbstractC
     }
 
     @Override
-    protected Stream<Component> getTooltipLines(T t) {
+    protected Stream<Component> getTooltipLines(T t, int maxWidth) {
         ResourceKey<?> resourceKey = this.getResourceKey(t);
         return ModLoaderEnvironment.INSTANCE.getModContainer(resourceKey.identifier().getNamespace())
                 .map(ModContainer::getDisplayName)
