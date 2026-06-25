@@ -83,7 +83,7 @@ public class TooltipInsightsClient implements ClientModConstructor {
                                 .spliterator(), false)
                         .collect(Collectors.toMap(MobEffectInstance::getDescriptionId,
                                 Function.identity(),
-                                (MobEffectInstance o1, MobEffectInstance o2) -> o1));
+                                (MobEffectInstance o1, MobEffectInstance o2) -> o2));
             }
 
             @Override

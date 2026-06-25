@@ -32,6 +32,9 @@ public abstract class AbstractClientConfig implements ConfigCore {
     }
 
     public static class TooltipComponents implements ConfigCore {
+        @Config(description = "The maximum line width in pixels.")
+        @Config.IntRange(min = 25)
+        public int maximumWidth = 175;
         @Config(description = "Add the description to tooltips.")
         public boolean valueDescription = true;
         @Config(description = "Add the name of the source mod to tooltips.")

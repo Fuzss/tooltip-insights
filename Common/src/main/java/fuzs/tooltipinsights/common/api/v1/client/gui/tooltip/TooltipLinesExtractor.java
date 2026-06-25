@@ -51,11 +51,11 @@ public abstract class TooltipLinesExtractor<T, C extends AbstractClientConfig.To
 
     protected abstract boolean isEnabled(C tooltipComponents);
 
-    protected abstract Stream<Component> getTooltipLines(T t);
+    protected abstract Stream<Component> getTooltipLines(T t, int maxWidth);
 
     public final Stream<Component> getTooltipLines(C tooltipComponents, T t) {
         if (this.isEnabled(tooltipComponents)) {
-            return this.getTooltipLines(t);
+            return this.getTooltipLines(t, tooltipComponents.maximumWidth);
         } else {
             return Stream.empty();
         }

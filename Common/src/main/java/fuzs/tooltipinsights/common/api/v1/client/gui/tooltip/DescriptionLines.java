@@ -21,10 +21,10 @@ public abstract class DescriptionLines<T> extends TooltipLinesExtractor<T, Abstr
     }
 
     @Override
-    protected final Stream<Component> getTooltipLines(T t) {
+    protected final Stream<Component> getTooltipLines(T t, int maxWidth) {
         String descriptionKey = getDescriptionTranslationKey(this.getDescriptionId(t));
         if (descriptionKey != null) {
-            return ClientComponentSplitter.splitTooltipLines(Component.translatable(descriptionKey))
+            return ClientComponentSplitter.splitTooltipLines(maxWidth, Component.translatable(descriptionKey))
                     .map(ComponentHelper::getAsComponent);
         } else {
             return Stream.empty();
