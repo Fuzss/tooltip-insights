@@ -11,6 +11,7 @@ import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.InternalNameLines;
 import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.ModNameLines;
 import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.TooltipLinesExtractor;
 import fuzs.tooltipinsights.common.api.v1.client.handler.TooltipDescriptionsHandler;
+import fuzs.tooltipinsights.common.api.v1.config.StyledTooltipsConfig;
 import fuzs.tooltipinsights.common.api.v1.config.TooltipComponentsConfig;
 import fuzs.tooltipinsights.common.api.v1.config.TooltipDescriptionMode;
 import fuzs.tooltipinsights.common.impl.TooltipInsights;
@@ -77,8 +78,11 @@ public class TooltipInsightsClient implements ClientModConstructor {
                     INTERNAL_NAME);
 
             @Override
-            protected TooltipDescriptionMode getTooltipDescriptionMode() {
-                return TooltipDescriptionMode.SHIFT;
+            protected StyledTooltipsConfig<?> getStyleConfig() {
+                return Util.make(new StyledTooltipsConfig<>(new TooltipComponentsConfig()),
+                        (StyledTooltipsConfig<TooltipComponentsConfig> config) -> {
+                            config.tooltipDescriptions = TooltipDescriptionMode.SHIFT;
+                        });
             }
 
             @Override
@@ -98,8 +102,8 @@ public class TooltipInsightsClient implements ClientModConstructor {
                         Component.literal(" \u25C6 "),
                         Style.EMPTY.withColor(ChatFormatting.GRAY),
                         value,
-                        Util.make(new TooltipComponentsConfig(), (TooltipComponentsConfig tooltipComponents) -> {
-                            tooltipComponents.modName = tooltipComponents.internalName = true;
+                        Util.make(new TooltipComponentsConfig(), (TooltipComponentsConfig config) -> {
+                            config.modName = config.internalName = true;
                         }));
             }
         }::onItemTooltip);

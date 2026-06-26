@@ -22,8 +22,8 @@ public abstract class TooltipLinesExtractor<T, C extends TooltipComponentsConfig
 
     public static <T, C extends TooltipComponentsConfig> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, T value, StyledTooltipsConfig<C> config) {
         return TooltipLinesExtractor.getTooltipLines(extractorList,
-                config.decorationComponent,
-                config.textStyle,
+                config.descriptionDecorationComponent,
+                config.descriptionStyle,
                 value,
                 config.tooltipLines);
     }
@@ -31,7 +31,7 @@ public abstract class TooltipLinesExtractor<T, C extends TooltipComponentsConfig
     public static <T, C extends TooltipComponentsConfig> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, Component decorationComponent, Style style, T value, C tooltipComponents) {
         Font font = Minecraft.getInstance().font;
         Component indentComponent = Component.object(new WidthLimitedSprite(font.width(decorationComponent)));
-        MutableBoolean mutableBoolean = new MutableBoolean(true);
+        MutableBoolean isMissingDecoration = new MutableBoolean(true);
         List<Component> tooltipLines = new ArrayList<>();
 
         for (TooltipLinesExtractor<T, C> extractor : extractorList) {
@@ -41,8 +41,8 @@ public abstract class TooltipLinesExtractor<T, C extends TooltipComponentsConfig
                 for (Component tooltipLine : list) {
                     Component component;
 
-                    if (mutableBoolean.isTrue()) {
-                        mutableBoolean.setFalse();
+                    if (isMissingDecoration.isTrue()) {
+                        isMissingDecoration.setFalse();
                         component = decorationComponent;
                     } else {
                         component = indentComponent;
