@@ -2,27 +2,27 @@ package fuzs.tooltipinsights.common.api.v1.client.gui.tooltip;
 
 import fuzs.puzzleslib.common.api.client.gui.v2.tooltip.ClientComponentSplitter;
 import fuzs.puzzleslib.common.api.util.v1.ComponentHelper;
-import fuzs.tooltipinsights.common.api.v1.config.AbstractClientConfig;
+import fuzs.tooltipinsights.common.api.v1.config.TooltipComponentsConfig;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public abstract class DescriptionLines<T> extends TooltipLinesExtractor<T, AbstractClientConfig.TooltipComponents> {
+public abstract class DescriptionLines<T> extends TooltipLinesExtractor<T, TooltipComponentsConfig> {
 
     public DescriptionLines() {
         super(true);
     }
 
     @Override
-    protected final boolean isEnabled(AbstractClientConfig.TooltipComponents tooltipComponents) {
+    protected boolean isEnabled(TooltipComponentsConfig tooltipComponents) {
         return tooltipComponents.valueDescription;
     }
 
     @Override
-    protected final Stream<Component> getTooltipLines(T t, int maxWidth) {
-        String descriptionKey = getDescriptionTranslationKey(this.getDescriptionId(t));
+    public Stream<Component> getTooltipLines(T value, int maxWidth) {
+        String descriptionKey = getDescriptionTranslationKey(this.getDescriptionId(value));
         if (descriptionKey != null) {
             return ClientComponentSplitter.splitTooltipLines(maxWidth, Component.translatable(descriptionKey))
                     .map(ComponentHelper::getAsComponent);
@@ -33,13 +33,13 @@ public abstract class DescriptionLines<T> extends TooltipLinesExtractor<T, Abstr
 
     public static @Nullable String getDescriptionTranslationKey(String translationKey) {
         if (Language.getInstance().has(translationKey + ".desc")) {
-            // our own format, similar to Enchantment Descriptions mod format
+            // The default format established by the popular Enchantment Descriptions mod.
             return translationKey + ".desc";
         } else if (Language.getInstance().has(translationKey + ".description")) {
-            // Just Enough Effect Descriptions mod format
+            // An alternative format from the Just Enough Effect Descriptions mod.
             return translationKey + ".description";
         } else if (Language.getInstance().has("description." + translationKey)) {
-            // Potion Descriptions mod format
+            // The old Potion Descriptions mod format.
             return "description." + translationKey;
         } else {
             return null;

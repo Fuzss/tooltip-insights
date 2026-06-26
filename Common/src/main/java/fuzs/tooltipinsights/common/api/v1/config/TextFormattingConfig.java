@@ -4,12 +4,14 @@ import com.google.common.collect.Sets;
 import fuzs.puzzleslib.common.api.config.v3.Config;
 import fuzs.puzzleslib.common.api.config.v3.ConfigCore;
 import fuzs.puzzleslib.common.api.config.v3.ValueCallback;
+import fuzs.puzzleslib.common.api.util.v1.ComponentHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.TriState;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -35,9 +37,23 @@ public class TextFormattingConfig implements ConfigCore {
     @Config(description = "Should text appear italic.")
     public TriState italic = TriState.DEFAULT;
 
+    public TextFormattingConfig() {
+        this(false, ChatFormatting.WHITE);
+    }
+
+    public TextFormattingConfig(TextColor color) {
+        this(true, ComponentHelper.COLORS.get(color));
+    }
+
+    private TextFormattingConfig(boolean colored, ChatFormatting color) {
+        Objects.requireNonNull(color, "color is null");
+        this.colored = colored;
+        this.color = color;
+    }
+
     @Override
     public void addToBuilder(ModConfigSpec.Builder builder, ValueCallback callback) {
-        callback.accept(builder.comment("The text color.").defineEnum("color", ChatFormatting.WHITE, TEXT_COLORS),
+        callback.accept(builder.comment("The text color.").defineEnum("color", this.color, TEXT_COLORS),
                 v -> this.color = v);
     }
 
