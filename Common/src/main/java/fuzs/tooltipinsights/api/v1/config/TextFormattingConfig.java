@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -34,9 +35,23 @@ public class TextFormattingConfig implements ConfigCore {
     @Config(description = "Should text appear italic.")
     public TriState italic = TriState.DEFAULT;
 
+    public TextFormattingConfig() {
+        this(false, ChatFormatting.WHITE);
+    }
+
+    public TextFormattingConfig(ChatFormatting color) {
+        this(true, color.isColor() ? color : null);
+    }
+
+    private TextFormattingConfig(boolean colored, ChatFormatting color) {
+        Objects.requireNonNull(color, "color is null");
+        this.colored = colored;
+        this.color = color;
+    }
+
     @Override
     public void addToBuilder(ModConfigSpec.Builder builder, ValueCallback callback) {
-        callback.accept(builder.comment("The text color.").defineEnum("color", ChatFormatting.WHITE, TEXT_COLORS),
+        callback.accept(builder.comment("The text color.").defineEnum("color", this.color, TEXT_COLORS),
                 v -> this.color = v);
     }
 
