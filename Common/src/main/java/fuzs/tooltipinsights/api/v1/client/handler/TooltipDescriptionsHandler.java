@@ -2,8 +2,8 @@ package fuzs.tooltipinsights.api.v1.client.handler;
 
 import fuzs.puzzleslib.api.client.event.v1.entity.player.ClientPlayerNetworkEvents;
 import fuzs.tooltipinsights.api.v1.client.gui.tooltip.DescriptionLines;
-import fuzs.tooltipinsights.api.v1.config.TooltipDescriptionMode;
 import fuzs.tooltipinsights.common.api.v1.config.StyledTooltipsConfig;
+import fuzs.tooltipinsights.api.v1.config.TooltipDescriptionMode;
 import fuzs.tooltipinsights.impl.TooltipInsights;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -29,7 +29,12 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-public abstract class TooltipDescriptionsHandler<T> {
+public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsConfig> {
+    protected final List<TooltipLinesExtractor<T, C>> extractorList;
+
+    public TooltipDescriptionsHandler(List<TooltipLinesExtractor<T, C>> extractorList) {
+        this.extractorList = extractorList;
+    }
 
     public void onItemTooltip(ItemStack itemStack, List<Component> tooltipLines, Item.TooltipContext tooltipContext, @Nullable Player player, TooltipFlag tooltipFlag) {
         this.modifyTooltip(itemStack, tooltipLines, tooltipContext.registries(), tooltipFlag);
@@ -43,7 +48,7 @@ public abstract class TooltipDescriptionsHandler<T> {
     }
 
     private void modifyTooltip(ItemStack itemStack, List<Component> tooltipLines, HolderLookup.Provider registries, TooltipFlag tooltipFlag) {
-        StyledTooltipsConfig<?> styleConfig = this.getStyleConfig();
+        StyledTooltipsConfig<C> styleConfig = this.getStyleConfig();
 
         if (styleConfig.tooltipDescriptions == TooltipDescriptionMode.DISABLED) {
             return;
@@ -71,7 +76,7 @@ public abstract class TooltipDescriptionsHandler<T> {
                                 }
 
                                 if (styleConfig.tooltipDescriptions.isActive()) {
-                                    List<Component> list = this.getItemTooltipLines(value);
+                                    List<Component> list = this.getItemTooltipLines(value, styleConfig);
                                     tooltipLines.addAll(mutableInt.intValue() + 1, list);
                                     mutableInt.add(list.size());
                                     return true;
@@ -91,7 +96,7 @@ public abstract class TooltipDescriptionsHandler<T> {
         }
     }
 
-    protected abstract StyledTooltipsConfig<?> getStyleConfig();
+    protected abstract StyledTooltipsConfig<C> getStyleConfig();
 
     protected abstract Map<String, T> getByDescriptionId(ItemStack itemStack, HolderLookup.Provider registries);
 
@@ -100,7 +105,13 @@ public abstract class TooltipDescriptionsHandler<T> {
         return null;
     }
 
-    protected abstract List<Component> getItemTooltipLines(T value);
+    protected List<Component> getItemTooltipLines(T value, StyledTooltipsConfig<C> styleConfig) {
+        return TooltipLinesExtractor.getTooltipLines(this.extractorList,
+                styleConfig.descriptionDecorationComponent,
+                styleConfig.descriptionStyle,
+                value,
+                styleConfig.tooltipLines);
+    }
 
     public static boolean modifyTranslatableContents(Component component, UnaryOperator<Component> componentReplacer, BiPredicate<TranslatableContents, UnaryOperator<Component>> contentsGatherer) {
         if (component.getContents() instanceof TranslatableContents contents) {
@@ -138,6 +149,10 @@ public abstract class TooltipDescriptionsHandler<T> {
     }
 
     public static <T> void printMissingDescriptionWarnings(ResourceKey<? extends Registry<? extends T>> registryKey, Function<Holder.Reference<T>, String> descriptionIdGetter) {
+        if (!ModLoaderEnvironment.INSTANCE.isDevelopmentEnvironment(TooltipInsights.MOD_ID)) {
+            return;
+        }
+
         ClientPlayerNetworkEvents.LOGGED_IN.register((LocalPlayer player, MultiPlayerGameMode multiPlayerGameMode, Connection connection) -> {
             player.registryAccess().lookupOrThrow(registryKey).listElements().forEach((Holder.Reference<T> holder) -> {
                 String translationKey = descriptionIdGetter.apply(holder);
