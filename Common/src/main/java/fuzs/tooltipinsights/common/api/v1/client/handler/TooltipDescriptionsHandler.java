@@ -116,7 +116,7 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
                 styleConfig.tooltipLines);
     }
 
-    private static boolean modifyTranslatableContents(Component component, UnaryOperator<Component> componentReplacer, BiPredicate<TranslatableContents, UnaryOperator<Component>> contentsGatherer) {
+    public static boolean modifyTranslatableContents(Component component, UnaryOperator<Component> componentReplacer, BiPredicate<TranslatableContents, UnaryOperator<Component>> contentsGatherer) {
         if (component.getContents() instanceof TranslatableContents contents) {
             if (contentsGatherer.test(contents, componentReplacer)) {
                 return true;
