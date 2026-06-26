@@ -9,17 +9,17 @@ import net.minecraft.network.chat.TextColor;
 public class StyledTooltipsConfig<T extends TooltipComponentsConfig> implements ConfigCore {
     @Config(description = "Add descriptions and other useful information to tooltips.")
     public TooltipDescriptionMode tooltipDescriptions = TooltipDescriptionMode.ALWAYS;
+    @Config(description = "Add a note on how to show descriptions when they are hidden.")
+    public boolean tooltipDescriptionsHint = true;
     @Config
     public final T tooltipLines;
     @Config(description = "Formatting for setting a text color and various styles for the description component.")
-    final TextFormattingConfig textFormatting = new TextFormattingConfig(TextColor.GRAY);
+    final TextFormattingConfig descriptionFormatting = new TextFormattingConfig(TextColor.GRAY);
     @Config(description = "Apply a fixed string before every initial description line.")
-    String decoration = " \u25C6 ";
-    @Config(description = "Formatting for setting a text color and various styles for the decoration component.")
-    final TextFormattingConfig decorationFormatting = new TextFormattingConfig(TextColor.GRAY);
+    String descriptionDecoration = " \u25C6 ";
 
-    public Style textStyle;
-    public Component decorationComponent;
+    public Style descriptionStyle;
+    public Component descriptionDecorationComponent;
 
     public StyledTooltipsConfig(T tooltipLines) {
         this.tooltipLines = tooltipLines;
@@ -27,7 +27,7 @@ public class StyledTooltipsConfig<T extends TooltipComponentsConfig> implements 
 
     @Override
     public void afterConfigReload() {
-        this.textStyle = this.textFormatting.getStyle();
-        this.decorationComponent = Component.literal(this.decoration).setStyle(this.decorationFormatting.getStyle());
+        this.descriptionStyle = this.descriptionFormatting.getStyle();
+        this.descriptionDecorationComponent = Component.literal(this.descriptionDecoration);
     }
 }
