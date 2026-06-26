@@ -2,9 +2,9 @@ package fuzs.tooltipinsights.common.api.v1.config;
 
 import fuzs.puzzleslib.common.api.config.v3.Config;
 import fuzs.puzzleslib.common.api.config.v3.ConfigCore;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 
 public class StyledTooltipsConfig<T extends TooltipComponentsConfig> implements ConfigCore {
     @Config(description = "Add descriptions and other useful information to tooltips.")
@@ -14,7 +14,7 @@ public class StyledTooltipsConfig<T extends TooltipComponentsConfig> implements 
     @Config
     public final T tooltipLines;
     @Config(description = "Formatting for setting a text color and various styles for the description component.")
-    final TextFormattingConfig descriptionFormatting = new TextFormattingConfig(TextColor.GRAY);
+    final TextFormattingConfig descriptionFormatting = new TextFormattingConfig(ChatFormatting.GRAY);
     @Config(description = "Apply a fixed string before every initial description line.")
     String descriptionDecoration = " \u25C6 ";
 

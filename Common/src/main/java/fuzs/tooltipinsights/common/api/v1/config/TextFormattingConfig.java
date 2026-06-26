@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import fuzs.puzzleslib.common.api.config.v3.Config;
 import fuzs.puzzleslib.common.api.config.v3.ConfigCore;
 import fuzs.puzzleslib.common.api.config.v3.ValueCallback;
-import fuzs.puzzleslib.common.api.util.v1.ComponentHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -41,8 +40,8 @@ public class TextFormattingConfig implements ConfigCore {
         this(false, ChatFormatting.WHITE);
     }
 
-    public TextFormattingConfig(TextColor color) {
-        this(true, ComponentHelper.COLORS.get(color));
+    public TextFormattingConfig(ChatFormatting color) {
+        this(true, color.isColor() ? color : null);
     }
 
     private TextFormattingConfig(boolean colored, ChatFormatting color) {
