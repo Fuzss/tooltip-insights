@@ -1,4 +1,6 @@
 {
-  "gui.tooltipinsights.tooltip.shift": "⇧ Shift",
+  "gui.tooltipinsights.tooltip.alt": "Alt",
+  "gui.tooltipinsights.tooltip.control": "Control",
+  "gui.tooltipinsights.tooltip.shift": "Shift",
   "gui.tooltipinsights.tooltip.view_descriptions": "Hold %s to view descriptions."
 }
