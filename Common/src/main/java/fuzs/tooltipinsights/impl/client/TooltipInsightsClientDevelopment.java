@@ -66,8 +66,10 @@ public class TooltipInsightsClientDevelopment implements ClientModConstructor {
             @Override
             protected StyledTooltipsConfig<TooltipComponentsConfig> getStyleConfig() {
                 TooltipComponentsConfig tooltipLines = new TooltipComponentsConfig();
+                tooltipLines.afterConfigReload();
                 tooltipLines.modName = tooltipLines.internalName = true;
                 StyledTooltipsConfig<TooltipComponentsConfig> styleConfig = new StyledTooltipsConfig<>(tooltipLines);
+                styleConfig.afterConfigReload();
                 styleConfig.tooltipDescriptions = TooltipDescriptionMode.SHIFT;
                 return styleConfig;
             }
