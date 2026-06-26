@@ -1,6 +1,5 @@
 package fuzs.tooltipinsights.common.api.v1.client.gui.tooltip;
 
-import fuzs.tooltipinsights.common.api.v1.config.StyledTooltipsConfig;
 import fuzs.tooltipinsights.common.api.v1.config.TooltipComponentsConfig;
 import fuzs.tooltipinsights.common.impl.network.chat.contents.objects.WidthLimitedSprite;
 import net.minecraft.client.Minecraft;
@@ -18,14 +17,6 @@ public abstract class TooltipLinesExtractor<T, C extends TooltipComponentsConfig
 
     public TooltipLinesExtractor(boolean supportsDecorations) {
         this.supportsDecorations = supportsDecorations;
-    }
-
-    public static <T, C extends TooltipComponentsConfig> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, T value, StyledTooltipsConfig<C> config) {
-        return TooltipLinesExtractor.getTooltipLines(extractorList,
-                config.descriptionDecorationComponent,
-                config.descriptionStyle,
-                value,
-                config.tooltipLines);
     }
 
     public static <T, C extends TooltipComponentsConfig> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, Component decorationComponent, Style style, T value, C tooltipComponents) {
