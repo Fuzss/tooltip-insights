@@ -1,17 +1,17 @@
-package fuzs.tooltipinsights.common.impl.client;
+package fuzs.tooltipinsights.impl.client;
 
 import com.google.common.collect.ImmutableList;
-import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
-import fuzs.puzzleslib.common.api.client.event.v1.gui.ItemTooltipCallback;
-import fuzs.puzzleslib.common.api.event.v1.core.EventPhase;
-import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.DescriptionLines;
-import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.InternalNameLines;
-import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.ModNameLines;
-import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.TooltipLinesExtractor;
-import fuzs.tooltipinsights.common.api.v1.client.handler.TooltipDescriptionsHandler;
-import fuzs.tooltipinsights.common.api.v1.config.StyledTooltipsConfig;
-import fuzs.tooltipinsights.common.api.v1.config.TooltipComponentsConfig;
-import fuzs.tooltipinsights.common.api.v1.config.TooltipDescriptionMode;
+import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.api.client.event.v1.gui.ItemTooltipCallback;
+import fuzs.puzzleslib.api.event.v1.core.EventPhase;
+import fuzs.tooltipinsights.api.v1.client.gui.tooltip.DescriptionLines;
+import fuzs.tooltipinsights.api.v1.client.gui.tooltip.InternalNameLines;
+import fuzs.tooltipinsights.api.v1.client.gui.tooltip.ModNameLines;
+import fuzs.tooltipinsights.api.v1.client.gui.tooltip.TooltipLinesExtractor;
+import fuzs.tooltipinsights.api.v1.client.handler.TooltipDescriptionsHandler;
+import fuzs.tooltipinsights.api.v1.config.StyledTooltipsConfig;
+import fuzs.tooltipinsights.api.v1.config.TooltipComponentsConfig;
+import fuzs.tooltipinsights.api.v1.config.TooltipDescriptionMode;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -35,7 +35,7 @@ public class TooltipInsightsClientDevelopment implements ClientModConstructor {
         }
 
         @Override
-        protected String getDescriptionId(MobEffectInstance mobEffect) {
+        protected String getDescriptionId(MobEffectInstance value) {
             throw new UnsupportedOperationException();
         }
     };

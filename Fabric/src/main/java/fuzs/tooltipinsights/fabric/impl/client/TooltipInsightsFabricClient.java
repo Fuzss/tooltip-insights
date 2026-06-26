@@ -2,7 +2,7 @@ package fuzs.tooltipinsights.fabric.impl.client;
 
 import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.api.core.v1.ModLoaderEnvironment;
-import fuzs.tooltipinsights.common.impl.client.TooltipInsightsClientDevelopment;
+import fuzs.tooltipinsights.impl.client.TooltipInsightsClientDevelopment;
 import fuzs.tooltipinsights.impl.TooltipInsights;
 import fuzs.tooltipinsights.impl.client.TooltipInsightsClient;
 import net.fabricmc.api.ClientModInitializer;

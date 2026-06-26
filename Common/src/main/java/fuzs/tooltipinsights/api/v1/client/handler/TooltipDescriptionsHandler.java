@@ -1,8 +1,11 @@
 package fuzs.tooltipinsights.api.v1.client.handler;
 
 import fuzs.puzzleslib.api.client.event.v1.entity.player.ClientPlayerNetworkEvents;
+import fuzs.puzzleslib.api.core.v1.ModLoaderEnvironment;
 import fuzs.tooltipinsights.api.v1.client.gui.tooltip.DescriptionLines;
-import fuzs.tooltipinsights.common.api.v1.config.StyledTooltipsConfig;
+import fuzs.tooltipinsights.api.v1.client.gui.tooltip.TooltipLinesExtractor;
+import fuzs.tooltipinsights.api.v1.config.StyledTooltipsConfig;
+import fuzs.tooltipinsights.api.v1.config.TooltipComponentsConfig;
 import fuzs.tooltipinsights.api.v1.config.TooltipDescriptionMode;
 import fuzs.tooltipinsights.impl.TooltipInsights;
 import net.minecraft.client.Minecraft;

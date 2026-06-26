@@ -3,7 +3,7 @@ package fuzs.tooltipinsights.neoforge.impl.client;
 import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.api.core.v1.ModLoaderEnvironment;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
-import fuzs.tooltipinsights.common.impl.client.TooltipInsightsClientDevelopment;
+import fuzs.tooltipinsights.impl.client.TooltipInsightsClientDevelopment;
 import fuzs.tooltipinsights.impl.TooltipInsights;
 import fuzs.tooltipinsights.impl.client.TooltipInsightsClient;
 import fuzs.tooltipinsights.impl.data.client.ModLanguageProvider;

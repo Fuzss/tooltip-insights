@@ -2,27 +2,27 @@ package fuzs.tooltipinsights.api.v1.client.gui.tooltip;
 
 import fuzs.puzzleslib.api.client.gui.v2.tooltip.ClientComponentSplitter;
 import fuzs.puzzleslib.api.util.v1.ComponentHelper;
-import fuzs.tooltipinsights.api.v1.config.AbstractClientConfig;
+import fuzs.tooltipinsights.api.v1.config.TooltipComponentsConfig;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public abstract class DescriptionLines<T> extends TooltipLinesExtractor<T, AbstractClientConfig.TooltipComponents> {
+public abstract class DescriptionLines<T> extends TooltipLinesExtractor<T, TooltipComponentsConfig> {
 
     public DescriptionLines() {
         super(true);
     }
 
     @Override
-    protected final boolean isEnabled(AbstractClientConfig.TooltipComponents tooltipComponents) {
+    protected final boolean isEnabled(TooltipComponentsConfig tooltipComponents) {
         return tooltipComponents.valueDescription;
     }
 
     @Override
-    protected final Stream<Component> getTooltipLines(T t) {
-        String descriptionKey = getDescriptionTranslationKey(this.getDescriptionId(t));
+    public Stream<Component> getTooltipLines(T value, int maxWidth) {
+        String descriptionKey = getDescriptionTranslationKey(this.getDescriptionId(value));
         if (descriptionKey != null) {
             return ClientComponentSplitter.splitTooltipLines(Component.translatable(descriptionKey))
                     .map(ComponentHelper::getAsComponent);
@@ -46,5 +46,5 @@ public abstract class DescriptionLines<T> extends TooltipLinesExtractor<T, Abstr
         }
     }
 
-    protected abstract String getDescriptionId(T t);
+    protected abstract String getDescriptionId(T value);
 }

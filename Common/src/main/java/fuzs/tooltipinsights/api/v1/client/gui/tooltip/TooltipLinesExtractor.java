@@ -1,6 +1,6 @@
 package fuzs.tooltipinsights.api.v1.client.gui.tooltip;
 
-import fuzs.tooltipinsights.common.api.v1.config.TooltipComponentsConfig;
+import fuzs.tooltipinsights.api.v1.config.TooltipComponentsConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
