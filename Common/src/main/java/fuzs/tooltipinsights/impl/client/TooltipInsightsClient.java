@@ -86,7 +86,7 @@ public class TooltipInsightsClient implements ClientModConstructor {
             protected List<Component> getItemTooltipLines(MobEffectInstance mobEffectInstance) {
                 return TooltipLinesExtractor.getTooltipLines(ITEM_SUPPLIERS,
                         Component.literal(" \u25C6 "),
-                        Style.EMPTY.applyFormat(ChatFormatting.GRAY),
+                        Style.EMPTY.withColor(ChatFormatting.GRAY),
                         mobEffectInstance,
                         Util.make(new AbstractClientConfig.TooltipComponents(),
                                 (AbstractClientConfig.TooltipComponents tooltipComponents) -> {

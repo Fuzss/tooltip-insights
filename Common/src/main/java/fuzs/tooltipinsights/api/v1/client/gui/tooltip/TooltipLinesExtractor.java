@@ -24,8 +24,8 @@ public abstract class TooltipLinesExtractor<T, C extends AbstractClientConfig.To
     public static <T, C extends AbstractClientConfig.TooltipComponents> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, Component decorationComponent, Style style, T t, C tooltipComponents) {
         // This works much better in 1.21.9+ with the custom object info component which can represent an arbitrary width,
         // but here this seems like a good enough workaround.
-        Component indentComponent = modifyAllStyles(decorationComponent, (Style styleX) -> {
-            return styleX.withColor(0xF0100010);
+        Component indentComponent = modifyAllStyles(decorationComponent, (Style updatedStyle) -> {
+            return updatedStyle.withColor(0xF0100010);
         });
         MutableBoolean mutableBoolean = new MutableBoolean(true);
         List<Component> tooltipLines = new ArrayList<>();
