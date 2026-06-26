@@ -1,6 +1,9 @@
 package fuzs.tooltipinsights.api.v1.client.gui.tooltip;
 
-import fuzs.tooltipinsights.api.v1.config.AbstractClientConfig;
+import fuzs.tooltipinsights.common.api.v1.config.StyledTooltipsConfig;
+import fuzs.tooltipinsights.common.api.v1.config.TooltipComponentsConfig;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -11,7 +14,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-public abstract class TooltipLinesExtractor<T, C extends AbstractClientConfig.TooltipComponents> {
+public abstract class TooltipLinesExtractor<T, C extends TooltipComponentsConfig> {
     private final boolean supportsDecorations;
 
     public TooltipLinesExtractor(boolean supportsDecorations) {
@@ -21,24 +24,24 @@ public abstract class TooltipLinesExtractor<T, C extends AbstractClientConfig.To
     /**
      * @see net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil#BACKGROUND_COLOR
      */
-    public static <T, C extends AbstractClientConfig.TooltipComponents> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, Component decorationComponent, Style style, T t, C tooltipComponents) {
+    public static <T, C extends TooltipComponentsConfig> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, Component decorationComponent, Style style, T value, C tooltipComponents) {
         // This works much better in 1.21.9+ with the custom object info component which can represent an arbitrary width,
         // but here this seems like a good enough workaround.
         Component indentComponent = modifyAllStyles(decorationComponent, (Style updatedStyle) -> {
             return updatedStyle.withColor(0xF0100010);
         });
-        MutableBoolean mutableBoolean = new MutableBoolean(true);
+        MutableBoolean isMissingDecoration = new MutableBoolean(true);
         List<Component> tooltipLines = new ArrayList<>();
 
         for (TooltipLinesExtractor<T, C> extractor : extractorList) {
-            List<Component> list = extractor.getTooltipLines(tooltipComponents, t).toList();
+            List<Component> list = extractor.getTooltipLines(tooltipComponents, value).toList();
 
             if (extractor.supportsDecorations) {
                 for (Component tooltipLine : list) {
                     Component component;
 
-                    if (mutableBoolean.isTrue()) {
-                        mutableBoolean.setFalse();
+                    if (isMissingDecoration.isTrue()) {
+                        isMissingDecoration.setFalse();
                         component = decorationComponent;
                     } else {
                         component = indentComponent;
@@ -65,11 +68,11 @@ public abstract class TooltipLinesExtractor<T, C extends AbstractClientConfig.To
 
     protected abstract boolean isEnabled(C tooltipComponents);
 
-    protected abstract Stream<Component> getTooltipLines(T t);
+    public abstract Stream<Component> getTooltipLines(T value, int maxWidth);
 
-    public final Stream<Component> getTooltipLines(C tooltipComponents, T t) {
+    public final Stream<Component> getTooltipLines(C tooltipComponents, T value) {
         if (this.isEnabled(tooltipComponents)) {
-            return this.getTooltipLines(t);
+            return this.getTooltipLines(value, tooltipComponents.maximumWidth);
         } else {
             return Stream.empty();
         }

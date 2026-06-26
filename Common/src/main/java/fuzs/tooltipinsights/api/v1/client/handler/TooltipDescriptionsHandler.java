@@ -3,6 +3,7 @@ package fuzs.tooltipinsights.api.v1.client.handler;
 import fuzs.puzzleslib.api.client.event.v1.entity.player.ClientPlayerNetworkEvents;
 import fuzs.tooltipinsights.api.v1.client.gui.tooltip.DescriptionLines;
 import fuzs.tooltipinsights.api.v1.config.TooltipDescriptionMode;
+import fuzs.tooltipinsights.common.api.v1.config.StyledTooltipsConfig;
 import fuzs.tooltipinsights.impl.TooltipInsights;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -42,41 +43,44 @@ public abstract class TooltipDescriptionsHandler<T> {
     }
 
     private void modifyTooltip(ItemStack itemStack, List<Component> tooltipLines, HolderLookup.Provider registries, TooltipFlag tooltipFlag) {
-        TooltipDescriptionMode tooltipDescriptionMode = this.getTooltipDescriptionMode();
+        StyledTooltipsConfig<?> styleConfig = this.getStyleConfig();
 
-        if (tooltipDescriptionMode == TooltipDescriptionMode.DISABLED) {
+        if (styleConfig.tooltipDescriptions == TooltipDescriptionMode.DISABLED) {
             return;
         }
 
         Map<String, T> descriptionIds = this.getByDescriptionId(itemStack, registries);
 
         if (!descriptionIds.isEmpty()) {
-            MutableBoolean mutableBoolean = new MutableBoolean(true);
+            MutableBoolean tooltipDescriptionsHint = new MutableBoolean(styleConfig.tooltipDescriptionsHint);
 
             for (MutableInt mutableInt = new MutableInt();
                  mutableInt.intValue() < tooltipLines.size(); mutableInt.increment()) {
 
-                modifyTranslatableContents(tooltipLines.get(mutableInt.intValue()),
+                Component previousComponent = tooltipLines.get(mutableInt.intValue());
+                modifyTranslatableContents(previousComponent,
                         UnaryOperator.identity(),
                         (TranslatableContents translatableContents, UnaryOperator<Component> componentReplacer) -> {
 
                             if (descriptionIds.containsKey(translatableContents.getKey())) {
-                                T t = descriptionIds.get(translatableContents.getKey());
-                                Component component = this.getValueComponent(t);
+                                T value = descriptionIds.get(translatableContents.getKey());
+                                Component component = this.getValueComponent(value);
 
                                 if (component != null) {
                                     tooltipLines.set(mutableInt.intValue(), componentReplacer.apply(component));
                                 }
 
-                                if (tooltipDescriptionMode.isActive()) {
-                                    List<Component> list = this.getItemTooltipLines(t);
+                                if (styleConfig.tooltipDescriptions.isActive()) {
+                                    List<Component> list = this.getItemTooltipLines(value);
                                     tooltipLines.addAll(mutableInt.intValue() + 1, list);
                                     mutableInt.add(list.size());
                                     return true;
-                                } else if (mutableBoolean.isTrue()) {
+                                } else if (tooltipDescriptionsHint.isTrue()) {
                                     // make sure the view description line is only added when there will actually be a description
-                                    mutableBoolean.setFalse();
-                                    tooltipDescriptionMode.processTooltipLines(itemStack, tooltipLines, tooltipFlag);
+                                    tooltipDescriptionsHint.setFalse();
+                                    styleConfig.tooltipDescriptions.processTooltipLines(itemStack,
+                                            tooltipLines,
+                                            tooltipFlag);
                                     return true;
                                 }
                             }
@@ -87,28 +91,28 @@ public abstract class TooltipDescriptionsHandler<T> {
         }
     }
 
-    protected abstract TooltipDescriptionMode getTooltipDescriptionMode();
+    protected abstract StyledTooltipsConfig<?> getStyleConfig();
 
     protected abstract Map<String, T> getByDescriptionId(ItemStack itemStack, HolderLookup.Provider registries);
 
     @Nullable
-    protected Component getValueComponent(T t) {
+    protected Component getValueComponent(T value) {
         return null;
     }
 
-    protected abstract List<Component> getItemTooltipLines(T t);
+    protected abstract List<Component> getItemTooltipLines(T value);
 
     public static boolean modifyTranslatableContents(Component component, UnaryOperator<Component> componentReplacer, BiPredicate<TranslatableContents, UnaryOperator<Component>> contentsGatherer) {
-        if (component.getContents() instanceof TranslatableContents translatableContents) {
-            if (contentsGatherer.test(translatableContents, componentReplacer)) {
+        if (component.getContents() instanceof TranslatableContents contents) {
+            if (contentsGatherer.test(contents, componentReplacer)) {
                 return true;
             } else {
-                for (int i = 0; i < translatableContents.getArgs().length; i++) {
+                for (int i = 0; i < contents.getArgs().length; i++) {
                     int index = i;
 
-                    if (translatableContents.getArgs()[index] instanceof Component componentArg) {
-                        if (modifyTranslatableContents(componentArg, (Component componentX) -> {
-                            translatableContents.getArgs()[index] = componentX;
+                    if (contents.getArgs()[index] instanceof Component previousComponent) {
+                        if (modifyTranslatableContents(previousComponent, (Component updatedComponent) -> {
+                            contents.getArgs()[index] = updatedComponent;
                             return componentReplacer.apply(component);
                         }, contentsGatherer)) {
                             return true;
@@ -121,8 +125,9 @@ public abstract class TooltipDescriptionsHandler<T> {
         for (int i = 0; i < component.getSiblings().size(); i++) {
             int index = i;
 
-            if (modifyTranslatableContents(component.getSiblings().get(index), (Component componentX) -> {
-                component.getSiblings().set(index, componentX);
+            Component previousComponent = component.getSiblings().get(index);
+            if (modifyTranslatableContents(previousComponent, (Component updatedComponent) -> {
+                component.getSiblings().set(index, updatedComponent);
                 return componentReplacer.apply(component);
             }, contentsGatherer)) {
                 return true;
