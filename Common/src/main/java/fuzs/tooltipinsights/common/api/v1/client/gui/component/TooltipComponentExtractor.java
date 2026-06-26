@@ -6,20 +6,20 @@ import net.minecraft.world.item.ItemStack;
 import java.util.stream.Stream;
 
 public abstract class TooltipComponentExtractor<T, C> {
-    private final DataComponentType<C> dataComponentType;
+    private final DataComponentType<C> type;
 
-    public TooltipComponentExtractor(DataComponentType<C> dataComponentType) {
-        this.dataComponentType = dataComponentType;
+    public TooltipComponentExtractor(DataComponentType<C> type) {
+        this.type = type;
     }
 
     protected abstract boolean isEnabled();
 
-    protected abstract Stream<T> extractFromComponent(C dataComponent);
+    protected abstract Stream<T> extractFromComponent(C component);
 
     public Stream<T> extractFromItemStack(ItemStack itemStack) {
-        if (this.isEnabled() && itemStack.has(this.dataComponentType)) {
-            C dataComponent = itemStack.get(this.dataComponentType);
-            return this.extractFromComponent(dataComponent);
+        if (this.isEnabled() && itemStack.has(this.type)) {
+            C component = itemStack.get(this.type);
+            return this.extractFromComponent(component);
         } else {
             return Stream.empty();
         }

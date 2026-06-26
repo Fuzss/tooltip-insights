@@ -11,7 +11,7 @@ import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.InternalNameLines;
 import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.ModNameLines;
 import fuzs.tooltipinsights.common.api.v1.client.gui.tooltip.TooltipLinesExtractor;
 import fuzs.tooltipinsights.common.api.v1.client.handler.TooltipDescriptionsHandler;
-import fuzs.tooltipinsights.common.api.v1.config.AbstractClientConfig;
+import fuzs.tooltipinsights.common.api.v1.config.TooltipComponentsConfig;
 import fuzs.tooltipinsights.common.api.v1.config.TooltipDescriptionMode;
 import fuzs.tooltipinsights.common.impl.TooltipInsights;
 import fuzs.tooltipinsights.common.impl.client.gui.font.SizedAtlasGlyphProvider;
@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class TooltipInsightsClient implements ClientModConstructor {
@@ -47,25 +48,30 @@ public class TooltipInsightsClient implements ClientModConstructor {
         }
 
         ItemTooltipCallback.EVENT.register(EventPhase.LAST, new TooltipDescriptionsHandler<MobEffectInstance>() {
-            static final TooltipLinesExtractor<MobEffectInstance, AbstractClientConfig.TooltipComponents> DESCRIPTION = new DescriptionLines<>() {
+            static final TooltipLinesExtractor<MobEffectInstance, TooltipComponentsConfig> DESCRIPTION = new DescriptionLines<>() {
+                @Override
+                public Stream<Component> getTooltipLines(MobEffectInstance value, int maxWidth) {
+                    return Stream.of(Component.literal("Prevents fire and lava damage."));
+                }
+
                 @Override
                 protected String getDescriptionId(MobEffectInstance mobEffect) {
-                    return mobEffect.getDescriptionId();
+                    throw new UnsupportedOperationException();
                 }
             };
-            static final TooltipLinesExtractor<MobEffectInstance, AbstractClientConfig.TooltipComponents> MOD_NAME = new ModNameLines<>() {
+            static final TooltipLinesExtractor<MobEffectInstance, TooltipComponentsConfig> MOD_NAME = new ModNameLines<>() {
                 @Override
                 protected ResourceKey<?> getResourceKey(MobEffectInstance mobEffect) {
                     return mobEffect.getEffect().unwrapKey().orElseThrow();
                 }
             };
-            static final TooltipLinesExtractor<MobEffectInstance, AbstractClientConfig.TooltipComponents> INTERNAL_NAME = new InternalNameLines<>() {
+            static final TooltipLinesExtractor<MobEffectInstance, TooltipComponentsConfig> INTERNAL_NAME = new InternalNameLines<>() {
                 @Override
                 protected ResourceKey<?> getResourceKey(MobEffectInstance mobEffect) {
                     return mobEffect.getEffect().unwrapKey().orElseThrow();
                 }
             };
-            static final List<TooltipLinesExtractor<MobEffectInstance, AbstractClientConfig.TooltipComponents>> ITEM_SUPPLIERS = ImmutableList.of(
+            static final List<TooltipLinesExtractor<MobEffectInstance, TooltipComponentsConfig>> ITEM_SUPPLIERS = ImmutableList.of(
                     DESCRIPTION,
                     MOD_NAME,
                     INTERNAL_NAME);
@@ -87,15 +93,14 @@ public class TooltipInsightsClient implements ClientModConstructor {
             }
 
             @Override
-            protected List<Component> getItemTooltipLines(MobEffectInstance mobEffectInstance) {
+            protected List<Component> getItemTooltipLines(MobEffectInstance value) {
                 return TooltipLinesExtractor.getTooltipLines(ITEM_SUPPLIERS,
                         Component.literal(" \u25C6 "),
                         Style.EMPTY.withColor(ChatFormatting.GRAY),
-                        mobEffectInstance,
-                        Util.make(new AbstractClientConfig.TooltipComponents(),
-                                (AbstractClientConfig.TooltipComponents tooltipComponents) -> {
-                                    tooltipComponents.modName = tooltipComponents.internalName = true;
-                                }));
+                        value,
+                        Util.make(new TooltipComponentsConfig(), (TooltipComponentsConfig tooltipComponents) -> {
+                            tooltipComponents.modName = tooltipComponents.internalName = true;
+                        }));
             }
         }::onItemTooltip);
     }

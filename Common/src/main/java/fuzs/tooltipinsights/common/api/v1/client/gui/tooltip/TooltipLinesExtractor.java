@@ -1,6 +1,7 @@
 package fuzs.tooltipinsights.common.api.v1.client.gui.tooltip;
 
-import fuzs.tooltipinsights.common.api.v1.config.AbstractClientConfig;
+import fuzs.tooltipinsights.common.api.v1.config.StyledTooltipsConfig;
+import fuzs.tooltipinsights.common.api.v1.config.TooltipComponentsConfig;
 import fuzs.tooltipinsights.common.impl.network.chat.contents.objects.WidthLimitedSprite;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -12,21 +13,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class TooltipLinesExtractor<T, C extends AbstractClientConfig.TooltipComponents> {
+public abstract class TooltipLinesExtractor<T, C extends TooltipComponentsConfig> {
     private final boolean supportsDecorations;
 
     public TooltipLinesExtractor(boolean supportsDecorations) {
         this.supportsDecorations = supportsDecorations;
     }
 
-    public static <T, C extends AbstractClientConfig.TooltipComponents> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, Component decorationComponent, Style style, T t, C tooltipComponents) {
+    public static <T, C extends TooltipComponentsConfig> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, T value, StyledTooltipsConfig<C> config) {
+        return TooltipLinesExtractor.getTooltipLines(extractorList,
+                config.decorationComponent,
+                config.textStyle,
+                value,
+                config.tooltipLines);
+    }
+
+    public static <T, C extends TooltipComponentsConfig> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, Component decorationComponent, Style style, T value, C tooltipComponents) {
         Font font = Minecraft.getInstance().font;
         Component indentComponent = Component.object(new WidthLimitedSprite(font.width(decorationComponent)));
         MutableBoolean mutableBoolean = new MutableBoolean(true);
         List<Component> tooltipLines = new ArrayList<>();
 
         for (TooltipLinesExtractor<T, C> extractor : extractorList) {
-            List<Component> list = extractor.getTooltipLines(tooltipComponents, t).toList();
+            List<Component> list = extractor.getTooltipLines(tooltipComponents, value).toList();
 
             if (extractor.supportsDecorations) {
                 for (Component tooltipLine : list) {
@@ -51,11 +60,11 @@ public abstract class TooltipLinesExtractor<T, C extends AbstractClientConfig.To
 
     protected abstract boolean isEnabled(C tooltipComponents);
 
-    protected abstract Stream<Component> getTooltipLines(T t, int maxWidth);
+    public abstract Stream<Component> getTooltipLines(T value, int maxWidth);
 
-    public final Stream<Component> getTooltipLines(C tooltipComponents, T t) {
+    public final Stream<Component> getTooltipLines(C tooltipComponents, T value) {
         if (this.isEnabled(tooltipComponents)) {
-            return this.getTooltipLines(t, tooltipComponents.maximumWidth);
+            return this.getTooltipLines(value, tooltipComponents.maximumWidth);
         } else {
             return Stream.empty();
         }

@@ -61,15 +61,15 @@ public abstract class TooltipDescriptionsHandler<T> {
                         (TranslatableContents translatableContents, UnaryOperator<Component> componentReplacer) -> {
 
                             if (descriptionIds.containsKey(translatableContents.getKey())) {
-                                T t = descriptionIds.get(translatableContents.getKey());
-                                Component component = this.getValueComponent(t);
+                                T value = descriptionIds.get(translatableContents.getKey());
+                                Component component = this.getValueComponent(value);
 
                                 if (component != null) {
                                     tooltipLines.set(mutableInt.intValue(), componentReplacer.apply(component));
                                 }
 
                                 if (tooltipDescriptionMode.isActive()) {
-                                    List<Component> list = this.getItemTooltipLines(t);
+                                    List<Component> list = this.getItemTooltipLines(value);
                                     tooltipLines.addAll(mutableInt.intValue() + 1, list);
                                     mutableInt.add(list.size());
                                     return true;
@@ -92,11 +92,11 @@ public abstract class TooltipDescriptionsHandler<T> {
     protected abstract Map<String, T> getByDescriptionId(ItemStack itemStack, HolderLookup.Provider registries);
 
     @Nullable
-    protected Component getValueComponent(T t) {
+    protected Component getValueComponent(T value) {
         return null;
     }
 
-    protected abstract List<Component> getItemTooltipLines(T t);
+    protected abstract List<Component> getItemTooltipLines(T value);
 
     public static boolean modifyTranslatableContents(Component component, UnaryOperator<Component> componentReplacer, BiPredicate<TranslatableContents, UnaryOperator<Component>> contentsGatherer) {
         if (component.getContents() instanceof TranslatableContents translatableContents) {
