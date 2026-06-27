@@ -32,17 +32,18 @@ public class TextFormattingConfig implements ConfigCore {
     private TextColor textColor;
 
     public TextFormattingConfig() {
-        this(false, TextColor.WHITE);
+        this(false, ChatFormatting.WHITE);
     }
 
-    public TextFormattingConfig(TextColor textColor) {
-        this(true, textColor);
+    public TextFormattingConfig(ChatFormatting color) {
+        this(true, color);
     }
 
-    private TextFormattingConfig(boolean colored, TextColor color) {
-        Objects.requireNonNull(color, "color is null");
+    private TextFormattingConfig(boolean colored, ChatFormatting color) {
+        TextColor textColor = TextColor.fromLegacyFormat(color);
+        Objects.requireNonNull(textColor, "color is null");
         this.colored = colored;
-        this.color = color.serialize();
+        this.color = textColor.serialize();
     }
 
     @Override
