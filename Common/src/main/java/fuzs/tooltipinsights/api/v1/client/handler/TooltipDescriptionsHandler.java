@@ -113,7 +113,7 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
                 styleConfig.descriptionDecorationComponent,
                 styleConfig.descriptionStyle,
                 value,
-                styleConfig.tooltipLines);
+                styleConfig.tooltipLines());
     }
 
     public static boolean modifyTranslatableContents(Component component, UnaryOperator<Component> componentReplacer, BiPredicate<TranslatableContents, UnaryOperator<Component>> contentsGatherer) {
