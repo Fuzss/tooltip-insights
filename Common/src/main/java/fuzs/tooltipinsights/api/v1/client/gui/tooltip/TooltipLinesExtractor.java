@@ -1,6 +1,7 @@
 package fuzs.tooltipinsights.api.v1.client.gui.tooltip;
 
 import fuzs.tooltipinsights.api.v1.config.TooltipComponentsConfig;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -23,8 +24,10 @@ public abstract class TooltipLinesExtractor<T, C extends TooltipComponentsConfig
      */
     public static <T, C extends TooltipComponentsConfig> List<Component> getTooltipLines(List<TooltipLinesExtractor<T, C>> extractorList, Component decorationComponent, Style style, T value, C tooltipComponents) {
         // This works much better in 1.21.9+ with the custom object info component which can represent an arbitrary width,
-        // but here this seems like a good enough workaround.
-        Component indentComponent = modifyAllStyles(decorationComponent, (Style updatedStyle) -> {
+        // but here this seems like an ok workaround.
+        Component plainComponent = Component.literal(ChatFormatting.stripFormatting(decorationComponent.getString()));
+        Component indentComponent = modifyAllStyles(plainComponent, (Style updatedStyle) -> {
+            // This is the exact color of the tooltip background.
             return updatedStyle.withColor(0xF0100010);
         });
         MutableBoolean isMissingDecoration = new MutableBoolean(true);
@@ -55,12 +58,12 @@ public abstract class TooltipLinesExtractor<T, C extends TooltipComponentsConfig
     }
 
     private static Component modifyAllStyles(Component component, UnaryOperator<Style> modifier) {
-        MutableComponent mutable = component.copy();
-        mutable.withStyle(modifier);
-        mutable.getSiblings().replaceAll((Component sibling) -> {
+        MutableComponent updatedComponent = component.copy();
+        updatedComponent.withStyle(modifier);
+        updatedComponent.getSiblings().replaceAll((Component sibling) -> {
             return modifyAllStyles(sibling, modifier);
         });
-        return mutable;
+        return updatedComponent;
     }
 
     protected abstract boolean isEnabled(C tooltipComponents);
