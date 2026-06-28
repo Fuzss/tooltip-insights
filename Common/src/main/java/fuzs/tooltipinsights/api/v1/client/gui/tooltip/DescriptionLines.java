@@ -24,7 +24,7 @@ public abstract class DescriptionLines<T> extends TooltipLinesExtractor<T, Toolt
     public Stream<Component> getTooltipLines(T value, int maxWidth) {
         String descriptionKey = getDescriptionTranslationKey(this.getDescriptionId(value));
         if (descriptionKey != null) {
-            return ClientComponentSplitter.splitTooltipLines(Component.translatable(descriptionKey))
+            return ClientComponentSplitter.splitTooltipLines(maxWidth, Component.translatable(descriptionKey))
                     .map(ComponentHelper::getAsComponent);
         } else {
             return Stream.empty();
