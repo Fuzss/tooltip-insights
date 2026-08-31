@@ -1,9 +1,10 @@
 {
+    "minecraft": "1.21.1",
     "mod": {
         "id": "tooltipinsights",
         "group": "fuzs.tooltipinsights",
         "name": "Tooltip Insights",
-        "version": "21.1.4",
+        "version": "21.1.5",
         "authors": [
             "Fuzs"
         ],
