@@ -20,7 +20,7 @@
 
 | Branch | Status | Changelog | Maven |
 | --- | --- | --- | --- |
-| [1.21.1](https://github.com/Fuzss/tooltip-insights/tree/1.21.1) | ✅&nbsp;Maintained | [CHANGELOG.md](https://github.com/Fuzss/tooltip-insights/blob/1.21.1/CHANGELOG.md) | [`fuzs.tooltipinsights:tooltipinsights-common:21.1.2`](https://github.com/Fuzss/modresources/tree/main/maven/fuzs/tooltipinsights/tooltipinsights-common/21.1.2)<br />[`fuzs.tooltipinsights:tooltipinsights-fabric:21.1.2`](https://github.com/Fuzss/modresources/tree/main/maven/fuzs/tooltipinsights/tooltipinsights-fabric/21.1.2)<br />[`fuzs.tooltipinsights:tooltipinsights-neoforge:21.1.2`](https://github.com/Fuzss/modresources/tree/main/maven/fuzs/tooltipinsights/tooltipinsights-neoforge/21.1.2) |
+| [1.21.1](https://github.com/Fuzss/tooltip-insights/tree/1.21.1) | ✅&nbsp;Maintained | [CHANGELOG.md](https://github.com/Fuzss/tooltip-insights/blob/1.21.1/CHANGELOG.md) | [`fuzs.tooltipinsights:tooltipinsights-common:21.1.5`](https://github.com/Fuzss/modresources/tree/main/maven/fuzs/tooltipinsights/tooltipinsights-common/21.1.5)<br />[`fuzs.tooltipinsights:tooltipinsights-fabric:21.1.5`](https://github.com/Fuzss/modresources/tree/main/maven/fuzs/tooltipinsights/tooltipinsights-fabric/21.1.5)<br />[`fuzs.tooltipinsights:tooltipinsights-neoforge:21.1.5`](https://github.com/Fuzss/modresources/tree/main/maven/fuzs/tooltipinsights/tooltipinsights-neoforge/21.1.5) |
 
 ---
 
