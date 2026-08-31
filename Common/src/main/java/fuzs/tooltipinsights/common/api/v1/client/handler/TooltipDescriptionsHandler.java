@@ -101,8 +101,14 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
 
     protected abstract StyledTooltipsConfig<C> getStyleConfig();
 
+    /**
+     * TODO change signature to {@code Map<Component, T> getByName(ItemStack itemStack, HolderLookup.Provider registries)}
+     */
     protected abstract Map<String, T> getByDescriptionId(ItemStack itemStack, HolderLookup.Provider registries);
 
+    /**
+     * TODO rename as {@code getNameComponent}
+     */
     @Nullable
     protected Component getValueComponent(T value) {
         return null;
@@ -116,6 +122,9 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
                 styleConfig.tooltipLines());
     }
 
+    /**
+     * TODO change signature to {@code BiPredicate<Component, UnaryOperator<Component>>}
+     */
     public static boolean modifyTranslatableContents(Component component, UnaryOperator<Component> componentReplacer, BiPredicate<TranslatableContents, UnaryOperator<Component>> contentsGatherer) {
         if (component.getContents() instanceof TranslatableContents contents) {
             if (contentsGatherer.test(contents, componentReplacer)) {
