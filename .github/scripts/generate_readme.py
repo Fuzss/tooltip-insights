@@ -319,10 +319,14 @@ def generate_table_row(
         version = metadata["mod"]["version"]
         group = metadata["mod"]["group"]
 
-        row += [
-            platform_links(links, minecraft, loader)
-            for loader in branch_loaders
-        ]
+        if has_download_links(links):
+            row += [
+                platform_links(links, minecraft, loader)
+                for loader in branch_loaders
+            ]
+
+        else:
+            row.append(platform_links(links, minecraft))
 
         if published:
             maven_entries = [maven_artifact(group, id, "common", version)]
