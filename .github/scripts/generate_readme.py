@@ -40,12 +40,12 @@ MOD_LOADERS = {
     "neoforge": ("NeoForge", 6)
 }
 
-CURSEFORGE_ICON = '<img src="https://cdn.simpleicons.org/curseforge" width="14" />&nbsp;'
-MODRINTH_ICON = '<img src="https://cdn.simpleicons.org/modrinth" width="14" />&nbsp;'
+CURSEFORGE_ICON = '<picture><img src="https://cdn.simpleicons.org/curseforge" width="14" /></picture>'
+MODRINTH_ICON = '<picture><img src="https://cdn.simpleicons.org/modrinth" width="14" /></picture>'
 DEFAULT_DOWNLOADS = (
-    f'{CURSEFORGE_ICON}'
+    f'{CURSEFORGE_ICON}&nbsp;'
     '[CurseForge](https://www.curseforge.com/members/fuzs_/projects)<br />'
-    f'{MODRINTH_ICON}'
+    f'{MODRINTH_ICON}&nbsp;'
     '[Modrinth](https://modrinth.com/user/Fuzs)'
 )
 
@@ -204,13 +204,13 @@ def build_table_header(metadata, published):
         else:
             header_columns += ["Downloads"]
 
-        if published:
-            header_columns += ["Maven"]
-
-        return header_columns
-    
     else:
-        return header_columns + ["Downloads"]
+        header_columns += ["Downloads"]
+
+    if published:
+        header_columns += ["Maven"]
+
+    return header_columns
 
 
 def get_mc_version(branch: str) -> str:
@@ -259,7 +259,7 @@ def platform_links(links, minecraft=None, platform=None):
             if parameters:
                 url += f"?{'&'.join(parameters)}"
 
-            entries.append(f"{CURSEFORGE_ICON}[CurseForge]({url})")
+            entries.append(f"{CURSEFORGE_ICON}&nbsp;[CurseForge]({url})")
 
         elif name == "modrinth":
             url = f"https://modrinth.com/mod/{slug}/versions"
@@ -275,7 +275,7 @@ def platform_links(links, minecraft=None, platform=None):
             if parameters:
                 url += f"?{'&'.join(parameters)}"
 
-            entries.append(f"{MODRINTH_ICON}[Modrinth]({url})")
+            entries.append(f"{MODRINTH_ICON}&nbsp;[Modrinth]({url})")
 
     return "<br />".join(entries) if entries else "n/a"
 
@@ -300,9 +300,9 @@ def generate_table_row(
     minecraft = get_mc_version(branch)
 
     links = [
-        f"📜 [History]({repo_url}/commits/{branch})",
-        f"📖 [README.md]({repo_url}/blob/{branch}/README.md)",
-        f"📝 [CHANGELOG.md]({repo_url}/blob/{branch}/CHANGELOG.md)"
+        f"📜&nbsp;[History]({repo_url}/commits/{branch})",
+        f"📖&nbsp;[README.md]({repo_url}/blob/{branch}/README.md)",
+        f"📝&nbsp;[CHANGELOG.md]({repo_url}/blob/{branch}/CHANGELOG.md)"
     ]
 
     row = [
@@ -337,19 +337,23 @@ def generate_table_row(
 
             row.append("<br />".join(maven_entries))
 
-    elif distributions:
-        links = [
-            {
-                "name": name,
-                **distribution
-            }
-            for name, distribution in distributions.items()
-        ]
-
-        row.append(platform_links(links, minecraft))
-
     else:
-        row.append(DEFAULT_DOWNLOADS)
+        if distributions:
+            links = [
+                {
+                    "name": name,
+                    **distribution
+                }
+                for name, distribution in distributions.items()
+            ]
+
+            row.append(platform_links(links, minecraft))
+
+        else:
+            row.append(DEFAULT_DOWNLOADS)
+
+        if published:
+            row.append("n/a")
 
     return "| " + " | ".join(row) + " |"
 
