@@ -2,8 +2,8 @@ package fuzs.tooltipinsights.common.impl.client.gui.font;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.font.GlyphInfo;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.textures.GpuTextureView;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.textures.GpuTextureView;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import fuzs.tooltipinsights.common.impl.network.chat.contents.objects.SizedAtlasSprite;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;

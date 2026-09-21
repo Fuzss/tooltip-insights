@@ -80,12 +80,14 @@ public class TooltipInsightsClientDevelopment implements ClientModConstructor {
             }
 
             @Override
-            protected Map<String, MobEffectInstance> getByDescriptionId(ItemStack itemStack, HolderLookup.Provider registries) {
+            protected Map<Component, MobEffectInstance> getByName(ItemStack itemStack, HolderLookup.Provider registries) {
                 // an item can contain the same effect multiple times, so make sure to include a merge function in our collect call
                 return StreamSupport.stream(itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
                                 .getAllEffects()
                                 .spliterator(), false)
-                        .collect(Collectors.toMap(MobEffectInstance::getDescriptionId,
+                        .collect(Collectors.toMap((MobEffectInstance effect) -> effect.getEffect()
+                                        .value()
+                                        .getDisplayName(),
                                 Function.identity(),
                                 (MobEffectInstance o1, MobEffectInstance o2) -> o2));
             }

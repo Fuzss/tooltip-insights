@@ -2,7 +2,7 @@ package fuzs.tooltipinsights.neoforge.impl.client;
 
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.common.api.core.v1.ModLoaderEnvironment;
-import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
+import fuzs.puzzleslib.neoforge.api.data.v3.core.DataProviderBuilder;
 import fuzs.tooltipinsights.common.impl.TooltipInsights;
 import fuzs.tooltipinsights.common.impl.client.TooltipInsightsClient;
 import fuzs.tooltipinsights.common.impl.client.TooltipInsightsClientDevelopment;
@@ -20,6 +20,6 @@ public class TooltipInsightsNeoForgeClient {
                     TooltipInsightsClientDevelopment::new);
         }
 
-        DataProviderHelper.registerDataProviders(TooltipInsights.MOD_ID, ModLanguageProvider::new);
+        DataProviderBuilder.of(TooltipInsights.MOD_ID).addProvider(ModLanguageProvider::new);
     }
 }

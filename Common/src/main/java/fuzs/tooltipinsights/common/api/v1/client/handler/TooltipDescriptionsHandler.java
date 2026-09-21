@@ -57,9 +57,9 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
             return;
         }
 
-        Map<String, T> descriptionIds = this.getByDescriptionId(itemStack, registries);
+        Map<Component, T> possibleNames = this.getByName(itemStack, registries);
 
-        if (!descriptionIds.isEmpty()) {
+        if (!possibleNames.isEmpty()) {
             MutableBoolean tooltipDescriptionsHint = new MutableBoolean(styleConfig.tooltipDescriptionsHint);
 
             for (MutableInt mutableInt = new MutableInt();
@@ -68,14 +68,14 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
                 Component previousComponent = tooltipLines.get(mutableInt.intValue());
                 modifyTranslatableContents(previousComponent,
                         UnaryOperator.identity(),
-                        (TranslatableContents translatableContents, UnaryOperator<Component> componentReplacer) -> {
+                        (Component component, UnaryOperator<Component> componentReplacer) -> {
 
-                            if (descriptionIds.containsKey(translatableContents.getKey())) {
-                                T value = descriptionIds.get(translatableContents.getKey());
-                                Component component = this.getValueComponent(value);
+                            if (possibleNames.containsKey(component)) {
+                                T value = possibleNames.get(component);
+                                Component name = this.getNameComponent(value);
 
-                                if (component != null) {
-                                    tooltipLines.set(mutableInt.intValue(), componentReplacer.apply(component));
+                                if (name != null) {
+                                    tooltipLines.set(mutableInt.intValue(), componentReplacer.apply(name));
                                 }
 
                                 if (styleConfig.tooltipDescriptions.isActive()) {
@@ -101,16 +101,10 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
 
     protected abstract StyledTooltipsConfig<C> getStyleConfig();
 
-    /**
-     * TODO change signature to {@code Map<Component, T> getByName(ItemStack itemStack, HolderLookup.Provider registries)}
-     */
-    protected abstract Map<String, T> getByDescriptionId(ItemStack itemStack, HolderLookup.Provider registries);
+    protected abstract Map<Component, T> getByName(ItemStack itemStack, HolderLookup.Provider registries);
 
-    /**
-     * TODO rename as {@code getNameComponent}
-     */
     @Nullable
-    protected Component getValueComponent(T value) {
+    protected Component getNameComponent(T value) {
         return null;
     }
 
@@ -122,24 +116,21 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
                 styleConfig.tooltipLines());
     }
 
-    /**
-     * TODO change signature to {@code BiPredicate<Component, UnaryOperator<Component>>}
-     */
-    public static boolean modifyTranslatableContents(Component component, UnaryOperator<Component> componentReplacer, BiPredicate<TranslatableContents, UnaryOperator<Component>> contentsGatherer) {
-        if (component.getContents() instanceof TranslatableContents contents) {
-            if (contentsGatherer.test(contents, componentReplacer)) {
-                return true;
-            } else {
-                for (int i = 0; i < contents.getArgs().length; i++) {
-                    int index = i;
+    public static boolean modifyTranslatableContents(Component component, UnaryOperator<Component> componentReplacer, BiPredicate<Component, UnaryOperator<Component>> contentsGatherer) {
+        if (contentsGatherer.test(component, componentReplacer)) {
+            return true;
+        }
 
-                    if (contents.getArgs()[index] instanceof Component previousComponent) {
-                        if (modifyTranslatableContents(previousComponent, (Component updatedComponent) -> {
-                            contents.getArgs()[index] = updatedComponent;
-                            return componentReplacer.apply(component);
-                        }, contentsGatherer)) {
-                            return true;
-                        }
+        if (component.getContents() instanceof TranslatableContents contents) {
+            for (int i = 0; i < contents.getArgs().length; i++) {
+                int index = i;
+
+                if (contents.getArgs()[index] instanceof Component previousComponent) {
+                    if (modifyTranslatableContents(previousComponent, (Component updatedComponent) -> {
+                        contents.getArgs()[index] = updatedComponent;
+                        return componentReplacer.apply(component);
+                    }, contentsGatherer)) {
+                        return true;
                     }
                 }
             }
