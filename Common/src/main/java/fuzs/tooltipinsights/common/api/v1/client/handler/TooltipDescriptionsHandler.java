@@ -58,6 +58,8 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
             return;
         }
 
+        // Do not match on full components (too brittle with extra sibling and style data); nor raw translation keys (those only work for translatable contents).
+        // This is the best of both worlds for handling different types of component contents well without any interference.
         Map<ComponentContents, T> possibleNames = this.getByName(itemStack, registries);
 
         if (!possibleNames.isEmpty()) {
