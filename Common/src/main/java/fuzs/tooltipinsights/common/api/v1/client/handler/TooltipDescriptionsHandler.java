@@ -72,10 +72,10 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
 
                             if (possibleNames.containsKey(component)) {
                                 T value = possibleNames.get(component);
-                                Component name = this.getNameComponent(value);
+                                Component updatedName = this.getNameComponent(component, value);
 
-                                if (name != null) {
-                                    tooltipLines.set(mutableInt.intValue(), componentReplacer.apply(name));
+                                if (updatedName != null) {
+                                    tooltipLines.set(mutableInt.intValue(), componentReplacer.apply(updatedName));
                                 }
 
                                 if (styleConfig.tooltipDescriptions.isActive()) {
@@ -104,7 +104,7 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
     protected abstract Map<Component, T> getByName(ItemStack itemStack, HolderLookup.Provider registries);
 
     @Nullable
-    protected Component getNameComponent(T value) {
+    protected Component getNameComponent(Component originalName, T value) {
         return null;
     }
 
