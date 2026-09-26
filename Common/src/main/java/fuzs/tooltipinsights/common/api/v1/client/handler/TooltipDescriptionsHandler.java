@@ -16,6 +16,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.player.Player;
@@ -57,7 +58,7 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
             return;
         }
 
-        Map<Component, T> possibleNames = this.getByName(itemStack, registries);
+        Map<ComponentContents, T> possibleNames = this.getByName(itemStack, registries);
 
         if (!possibleNames.isEmpty()) {
             MutableBoolean tooltipDescriptionsHint = new MutableBoolean(styleConfig.tooltipDescriptionsHint);
@@ -70,8 +71,9 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
                         UnaryOperator.identity(),
                         (Component component, UnaryOperator<Component> componentReplacer) -> {
 
-                            if (possibleNames.containsKey(component)) {
-                                T value = possibleNames.get(component);
+                            ComponentContents contents = component.getContents();
+                            if (possibleNames.containsKey(contents)) {
+                                T value = possibleNames.get(contents);
                                 Component updatedName = this.getNameComponent(component, value);
 
                                 if (updatedName != null) {
@@ -84,7 +86,7 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
                                     mutableInt.add(list.size());
                                     return true;
                                 } else if (tooltipDescriptionsHint.isTrue()) {
-                                    // make sure the view description line is only added when there will actually be a description
+                                    // Make sure the view description line is only added when there will actually be a description.
                                     tooltipDescriptionsHint.setFalse();
                                     styleConfig.tooltipDescriptions.processTooltipLines(itemStack,
                                             tooltipLines,
@@ -101,7 +103,7 @@ public abstract class TooltipDescriptionsHandler<T, C extends TooltipComponentsC
 
     protected abstract StyledTooltipsConfig<C> getStyleConfig();
 
-    protected abstract Map<Component, T> getByName(ItemStack itemStack, HolderLookup.Provider registries);
+    protected abstract Map<ComponentContents, T> getByName(ItemStack itemStack, HolderLookup.Provider registries);
 
     @Nullable
     protected Component getNameComponent(Component originalName, T value) {

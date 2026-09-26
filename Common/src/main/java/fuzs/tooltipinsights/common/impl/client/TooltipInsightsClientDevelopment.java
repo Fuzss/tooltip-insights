@@ -15,6 +15,7 @@ import fuzs.tooltipinsights.common.api.v1.config.TooltipDescriptionMode;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
@@ -80,14 +81,15 @@ public class TooltipInsightsClientDevelopment implements ClientModConstructor {
             }
 
             @Override
-            protected Map<Component, MobEffectInstance> getByName(ItemStack itemStack, HolderLookup.Provider registries) {
-                // an item can contain the same effect multiple times, so make sure to include a merge function in our collect call
+            protected Map<ComponentContents, MobEffectInstance> getByName(ItemStack itemStack, HolderLookup.Provider registries) {
+                // An item can contain the same effect multiple times, so make sure to include a merge function in our collect call.
                 return StreamSupport.stream(itemStack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
                                 .getAllEffects()
                                 .spliterator(), false)
                         .collect(Collectors.toMap((MobEffectInstance effect) -> effect.getEffect()
                                         .value()
-                                        .getDisplayName(),
+                                        .getDisplayName()
+                                        .getContents(),
                                 Function.identity(),
                                 (MobEffectInstance o1, MobEffectInstance o2) -> o2));
             }
